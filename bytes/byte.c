@@ -1,6 +1,7 @@
 #include <stdio.h>
 
-int main(){
+int main()
+{
 	int a = 0x88CCAABB;
 	unsigned char byte;
 	int this_bytes;
