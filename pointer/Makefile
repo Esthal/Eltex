@@ -1,10 +1,12 @@
 obj = pointer.o
+bin = pointer
+source = pointer.c
 
 edit: $(obj)
-	@gcc -o pointer $(obj)
+	@gcc -o $(bin) $(obj)
 
-pointer.o:
-	@gcc -c pointer.c
+$(obj): $(source)
+	@gcc -c $(source)
 
 clean:
-	rm pointer $(obj)
+	rm $(bin) $(obj)

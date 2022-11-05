@@ -1,10 +1,12 @@
 obj = array.o
+bin = array
+source = array.c
 
 edit: $(obj)
-	@gcc -o array $(obj)
+	@gcc -o $(bin) $(obj)
 
-array.o:
-	@gcc -c array.c
+$(obj): $(source)
+	@gcc -c $(source)
 
 clean:
-	rm array $(obj)
+	rm $(bin) $(obj)

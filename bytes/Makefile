@@ -1,10 +1,13 @@
 obj = byte.o
+bin = byte
+source = byte.c
+
 
 edit: $(obj)
-	@gcc -o byte $(obj)
+	@gcc -o $(bin) $(obj)
 
-byte.o:
-	@gcc -c byte.c
+$(obj): $(source)
+	@gcc -c $(source)
 
 clean:
-	rm byte $(obj)
+	rm $(bin) $(obj)
