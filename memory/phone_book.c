@@ -154,7 +154,6 @@ int main()
 	while(is_run){
 		print_command();
 
-		scanf("%*[^\n]");
 		printf("\nEtner the command: ");
 		if(scanf("%d", &command) != 1) 
 		{
