@@ -143,7 +143,17 @@ int init(struct list_of_func **HEAD)
 	}
 	return 0;
 }
-
+int deinit(struct list_of_func **HEAD)
+{
+	struct list_of_func *temp;
+	while (*HEAD != NULL)
+	{
+		temp = *HEAD;
+		free(*HEAD);
+		temp = (*HEAD)->next;
+		*HEAD = temp;
+	}
+}
 
 int main(int argc, char const *argv[])
 {
@@ -167,12 +177,14 @@ int main(int argc, char const *argv[])
 		}
 		if (command == 0)
 		{
+			close_dl(HEAD);
+			deinit(&HEAD);
 			puts("Good bye!");
 			return 0;
 		}
 		doing_command(HEAD, command);
 	}
 	close_dl(HEAD);
-
+	deinit(&HEAD);
 	return 0;
 }
