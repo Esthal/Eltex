@@ -1,14 +1,9 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <malloc.h>
+#include <stdlib.h>
 #include <string.h>
-#include <sys/wait.h>
-#include <errno.h>
-#include <sys/types.h>
-#include <time.h>
-#include <sys/wait.h>
 #include <unistd.h>
-#include <ctype.h>
+#include <sys/wait.h>
 
 
 
