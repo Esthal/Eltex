@@ -57,7 +57,7 @@ int main()
 
 
 	int matrix_three[N][N];
-	int x = 0, y = 0, number = 1;
+	int x = 0, y = 0, number = 0;
 	for(int i = 0; i < N; i++)
 	{
 		for(int j = 0; j < N; j++)
@@ -66,52 +66,43 @@ int main()
 		}
 	}
 	
-	
-	for(int i = 0; i < N; i++)
-	{
+	int size = N/2 + (N%2);
+	int len = N-1;
+	int i = 0;
+	int j = 0;
 
-		for(; y < N; y++)
+	for (int k = 0; k < size; k++)
+	{
+		for (int l = 0; l < len; l++)
 		{
-			if(matrix_three[x][y] != 0) 
-			{
-				break;
-			}
-			matrix_three[x][y] = number++;
+			matrix_three[i][j] = ++number;
+			j++;
 		}
-		y--;
-		x++;
-		
-		for(; x < N; x++)
+		for (int l = 0; l < len; l++)
 		{
-			if(matrix_three[x][y] != 0)
-			{
-				break;
-			}
-			matrix_three[x][y] = number++;	
+			matrix_three[i][j] = ++number;
+			i++;
 		}
-		x--;
-		y--;
-		for(; y > -1; y--)
+		for (int l = 0; l < len; l++)
 		{
-			if(matrix_three[x][y] != 0)
-			{
-				break;
-			}
-			matrix_three[x][y] = number++;	
+			matrix_three[i][j] = ++number;
+			j--;
 		}
-		y++;
-		x--;
-		for(; x > -1; x--)
+		for (int l = 0; l < len; l++)
 		{
-			if(matrix_three[x][y] != 0)
-			{
-				break;
-			}
-			matrix_three[x][y] = number++;	
+			matrix_three[i][j] = ++number;
+			i--;
 		}
-		x++;
-		y++;
+		i++;
+		j++;
+		len = len-2;
+		if (len == 0)
+		{
+			matrix_three[i][j] = ++number;
+		}
 	}
+	
+    
 	printf("\n\n");
 	
 	for(int i = 0; i < N; i++)

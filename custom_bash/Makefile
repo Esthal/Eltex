@@ -1,12 +1,15 @@
-obj = main.o
 bin = main
-source = main.c
+header = bash.h
+source = $(wildcard *.c)
+obj = $(patsubst %.c, %.o, $(source))
+
+.PHONY:clean
 
 edit: $(obj)
-	@gcc -o $(bin) $(obj)
+	@gcc -o $(bin) $(header) $(obj)
 
-$(obj): $(source)
-	@gcc -c $(source)
+%.o: %.c
+	@gcc -c $<
 
 clean:
-	rm $(bin) $(obj)
+	@rm $(bin) $(obj)
