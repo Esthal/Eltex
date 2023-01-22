@@ -7,6 +7,7 @@ scrMain := phone_book.c
 objMain := phone_book.o
 
 source := $(wildcard $(dirScr)/*.c)
+source := $(source) phone_book.c
 obj := $(patsubst $(dirScr)/%.c, %.o, $(source))
 
 
