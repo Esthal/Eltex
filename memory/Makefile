@@ -1,4 +1,4 @@
-dirScr := scr
+dirScr := src
 dirObj := obj
 
 bin := phone_book
@@ -7,7 +7,7 @@ scrMain := phone_book.c
 objMain := phone_book.o
 
 source := $(wildcard $(dirScr)/*.c)
-source := $(source) phone_book.c
+source := $(source) $(scrMain)
 obj := $(patsubst $(dirScr)/%.c, %.o, $(source))
 
 
