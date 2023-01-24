@@ -11,17 +11,20 @@ source := $(source) $(scrMain)
 obj := $(patsubst $(dirScr)/%.c, %.o, $(source))
 
 
+source := $(wildcard $(dirScr)/*.c) $(scrMain)
+obj := $(patsubst $(dirScr)/%.c, %.o, $(source))
+objs = $(wildcard $(dirObj)/*.o)
 
 .PHONY: clean
 
 edit: $(obj)
 	gcc -c $(scrMain)
-	mv $(objMain) $(dirObj)/$(objMain)
-	gcc -o $(bin) $(header) $(wildcard $(dirObj)/*.o)
+	gcc -o $(bin) $(header) $(objs) $(objMain) -lncurses	
 	
+
 %.o: $(dirScr)/%.c
 	gcc -c $<
 	mv $@ $(dirObj)/$@
 
 clean:
-	rm $(bin) obj/*
+	rm $(bin) obj/* $(objMain)
