@@ -13,6 +13,7 @@
 #include <sys/wait.h>
 #include <errno.h>
 
+
 #include <string.h>
 #include <malloc.h>
 
@@ -26,10 +27,10 @@ typedef struct ManagerDir
 
 typedef struct WinSize
 {
-    int padding_x;
-    int padding_y;
-    int x;
-    int y;
+    unsigned int padding_x;
+    unsigned int padding_y;
+    unsigned int x;
+    unsigned int y;
 } WinSize;
 
 void add_dir(ManagerDir **, char *, long int);
@@ -44,5 +45,14 @@ void print_pwd(WINDOW *, char *, int);
 void print_line(WINDOW *, char *, int);
 void set_window_size(WinSize *, int , int , int , int);
 void clear_screen(WINDOW *, WinSize);
+
+void move_it(char *, char *);
+void refresh_list(ManagerDir **, char *);
+void create_file(char *, char *);
+void delete_file(char *, char *);
+void move_file(char *, char *, char *);
+void copy_file(char *, char *);
+char *get_string(WINDOW *, WinSize);
+void rename_file(char *, char *, char *);
 
 #endif

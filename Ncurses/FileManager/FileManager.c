@@ -1,78 +1,5 @@
 #include "FileManager.h"
 
-void refresh_list(ManagerDir **list, char *cwd)
-{
-    clean_dir(list);
-    read_dir(cwd, list);
-}
-
-void create_file(char *cwd, char *name)
-{
-    char path[PATH_MAX];
-    strcpy(path, ".");
-    strcat(path, cwd);
-    strcat(path, "/");
-    strcat(path, name);
-
-    FILE *fp;
-    fp  = fopen(path, "w");
-    fclose(fp);
-}
-void delete_file(char *cwd, char *name)
-{
-    char path[PATH_MAX];
-    strcpy(path, ".");
-    strcat(path, cwd);
-    strcat(path, "/");
-    strcat(path, name);
-    remove(path);
-}
-void move_file(char *cwd_out, char *cwd_in, char *name)
-{
-    
-}
-void copy_file(char *cwd, char *name)
-{
-    char old_path[PATH_MAX];
-    char new_path[PATH_MAX];
-
-    strcpy(old_path, ".");
-    strcat(old_path, cwd);
-    strcat(old_path, "/");
-    strcat(old_path, name);
-
-    strcpy(new_path, old_path);
-    strcat(new_path, "-copy");
-
-    int pid = fork();
-    int status;
-
-    if(pid == 0)
-    {
-        if (execlp("cp", "cp", old_path, new_path, NULL) == -1)
-        {
-            exit(EXIT_FAILURE);
-        }
-    }
-    
-    do 
-    {
-        waitpid(pid, &status, WUNTRACED);
-    } 
-    while (!WIFEXITED(status) && !WIFSIGNALED(status));
-
-    move(0,0);
-    printw("%s", old_path);
-    move(0,30);
-    printw("%s", new_path);
-    refresh();
-    
-}
-void rename_file(char *cwd, char *old_name, char *new_name)
-{
-    
-}
-
 int main()
 {
     
@@ -116,6 +43,7 @@ int main()
     init_pair(1, COLOR_WHITE, init_color(0,0,0,700));
     init_pair(2, COLOR_BLACK, COLOR_GREEN);
     init_pair(3, COLOR_BLACK, COLOR_BLUE);
+    init_pair(4, COLOR_WHITE, COLOR_BLACK);
 
     bkgd(COLOR_PAIR(1));
     refresh();
@@ -164,13 +92,16 @@ int main()
     box(dir_field, '|', '-');
     box(dir_field_left, '|', '-');
     box(dir_field_right, '|', '-');
-    box(command_field, '|', '=');
+    whline(command_field, '=', size_command_field.x);
 
     keypad(dir_field_left, TRUE);
     keypad(dir_field_right, TRUE);
 
     wmove(command_field, 1, 1);
-    wprintw(command_field, "F1: Change screen | F9: Quit");
+    wprintw(command_field, "F1: Change screen | F2: Create file | F3: Delete file | F4: Move file");
+    wmove(command_field, 2, 1);
+    wprintw(command_field, "F5: Copy file | F6: Rename file | Left arrow: Open dir | F9: Quit");
+
 
     wrefresh(dir_field);
     wrefresh(dir_field_left);
@@ -187,6 +118,8 @@ int main()
     int need_refresh_screens = FALSE;
 
     char *cwd;
+
+    char *name_file;
 
     WINDOW *using_screen;
 
@@ -275,20 +208,56 @@ int main()
             use_left_field = !use_left_field;
             break;
         case KEY_F(2):
-            create_file(cwd, "hello.txt");
+            name_file = get_string(dir_field, size_dir_field);
+            create_file(cwd, name_file);
+            free(name_file);
+
+            box(dir_field_left, '|', '-');
+            box(dir_field_right, '|', '-');
+
+            wrefresh(dir_field_left);
+            wrefresh(dir_field_right);
+
             need_refresh_screens = TRUE;
             break;
         case KEY_F(3):
-            delete_file(cwd, "hello.txt");
+
+            if((*cur)->size != -1)
+            {
+                (*chosen_line)--;
+                delete_file(cwd, (*cur)->name);
+                (*cur) = (*cur)->prev;
+            } 
+            
             need_refresh_screens = TRUE;
             break;
-        case KEY_F(4): // move file
-            break;
-        case KEY_F(5): // copy file
-            copy_file(cwd, "hello.txt");
+        case KEY_F(4):
+            if (use_left_field)
+            {
+                move_file(cwd_left, cwd_right, (*cur)->name);
+            }
+            else
+            {
+                move_file(cwd_right, cwd_left, (*cur)->name);
+            }
             need_refresh_screens = TRUE;
             break;
-        case KEY_F(6): // rename file
+        case KEY_F(5):
+            copy_file(cwd, (*cur)->name);
+            need_refresh_screens = TRUE;
+            break;
+        case KEY_F(6):
+            name_file = get_string(dir_field, size_dir_field);
+            rename_file(cwd, (*cur)->name, name_file);
+            free(name_file);
+
+            box(dir_field_left, '|', '-');
+            box(dir_field_right, '|', '-');
+
+            wrefresh(dir_field_left);
+            wrefresh(dir_field_right);
+
+            need_refresh_screens = TRUE;
             break;
 
 
@@ -301,7 +270,7 @@ int main()
             exit(EXIT_SUCCESS);
             break;
         }
-
+        
 
         if (need_refresh_screens)
         {
@@ -357,6 +326,7 @@ int main()
                 cur_size = &size_dir_field_right;
             }
         }
+        
         
     }
     return 0;
