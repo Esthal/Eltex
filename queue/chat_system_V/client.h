@@ -37,6 +37,7 @@ typedef struct mes_chat
     struct mes_chat *prev;
 } chat;
 
+
 void set_size_screen(void);
 void clear_this_screen(WINDOW *, int, int);
 void clear_screen(void);
